@@ -47,9 +47,9 @@
 		B18EEDCA2C8CD0ED00D1A6DF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B18EEDCC2C8CD0EE00D1A6DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B18EEDCF2C8CD0EE00D1A6DF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		B18EEDD52C8CD0EE00D1A6DF /* ParentBankTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParentBankTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B18EEDD52C8CD0EE00D1A6DF /* ParentsBankTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParentsBankTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B18EEDD92C8CD0EE00D1A6DF /* PB_2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PB_2Tests.swift; sourceTree = "<group>"; };
-		B18EEDDF2C8CD0EE00D1A6DF /* ParentBankUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParentBankUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B18EEDDF2C8CD0EE00D1A6DF /* ParentsBankUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParentsBankUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B18EEDE32C8CD0EE00D1A6DF /* PB_2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PB_2UITests.swift; sourceTree = "<group>"; };
 		B18EEDE52C8CD0EE00D1A6DF /* PB_2UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PB_2UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B18EEDF22C8CD20000D1A6DF /* BankModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BankModel.swift; sourceTree = "<group>"; };
@@ -104,8 +104,8 @@
 			isa = PBXGroup;
 			children = (
 				B18EEDC52C8CD0ED00D1A6DF /* Parent Bank.app */,
-				B18EEDD52C8CD0EE00D1A6DF /* ParentBankTests.xctest */,
-				B18EEDDF2C8CD0EE00D1A6DF /* ParentBankUITests.xctest */,
+				B18EEDD52C8CD0EE00D1A6DF /* ParentsBankTests.xctest */,
+				B18EEDDF2C8CD0EE00D1A6DF /* ParentsBankUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,9 +156,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B18EEDC42C8CD0ED00D1A6DF /* ParentBank */ = {
+		B18EEDC42C8CD0ED00D1A6DF /* ParentsBank */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B18EEDE92C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentBank" */;
+			buildConfigurationList = B18EEDE92C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentsBank" */;
 			buildPhases = (
 				B18EEDC12C8CD0ED00D1A6DF /* Sources */,
 				B18EEDC22C8CD0ED00D1A6DF /* Frameworks */,
@@ -168,14 +168,14 @@
 			);
 			dependencies = (
 			);
-			name = ParentBank;
+			name = ParentsBank;
 			productName = "PB-2";
 			productReference = B18EEDC52C8CD0ED00D1A6DF /* Parent Bank.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B18EEDD42C8CD0EE00D1A6DF /* ParentBankTests */ = {
+		B18EEDD42C8CD0EE00D1A6DF /* ParentsBankTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B18EEDEC2C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentBankTests" */;
+			buildConfigurationList = B18EEDEC2C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentsBankTests" */;
 			buildPhases = (
 				B18EEDD12C8CD0EE00D1A6DF /* Sources */,
 				B18EEDD22C8CD0EE00D1A6DF /* Frameworks */,
@@ -186,14 +186,14 @@
 			dependencies = (
 				B18EEDD72C8CD0EE00D1A6DF /* PBXTargetDependency */,
 			);
-			name = ParentBankTests;
+			name = ParentsBankTests;
 			productName = "PB-2Tests";
-			productReference = B18EEDD52C8CD0EE00D1A6DF /* ParentBankTests.xctest */;
+			productReference = B18EEDD52C8CD0EE00D1A6DF /* ParentsBankTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		B18EEDDE2C8CD0EE00D1A6DF /* ParentBankUITests */ = {
+		B18EEDDE2C8CD0EE00D1A6DF /* ParentsBankUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B18EEDEF2C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentBankUITests" */;
+			buildConfigurationList = B18EEDEF2C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentsBankUITests" */;
 			buildPhases = (
 				B18EEDDB2C8CD0EE00D1A6DF /* Sources */,
 				B18EEDDC2C8CD0EE00D1A6DF /* Frameworks */,
@@ -204,9 +204,9 @@
 			dependencies = (
 				B18EEDE12C8CD0EE00D1A6DF /* PBXTargetDependency */,
 			);
-			name = ParentBankUITests;
+			name = ParentsBankUITests;
 			productName = "PB-2UITests";
-			productReference = B18EEDDF2C8CD0EE00D1A6DF /* ParentBankUITests.xctest */;
+			productReference = B18EEDDF2C8CD0EE00D1A6DF /* ParentsBankUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -232,7 +232,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B18EEDC02C8CD0ED00D1A6DF /* Build configuration list for PBXProject "ParentBank" */;
+			buildConfigurationList = B18EEDC02C8CD0ED00D1A6DF /* Build configuration list for PBXProject "ParentsBank" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -247,9 +247,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B18EEDC42C8CD0ED00D1A6DF /* ParentBank */,
-				B18EEDD42C8CD0EE00D1A6DF /* ParentBankTests */,
-				B18EEDDE2C8CD0EE00D1A6DF /* ParentBankUITests */,
+				B18EEDC42C8CD0ED00D1A6DF /* ParentsBank */,
+				B18EEDD42C8CD0EE00D1A6DF /* ParentsBankTests */,
+				B18EEDDE2C8CD0EE00D1A6DF /* ParentsBankUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -320,12 +320,12 @@
 /* Begin PBXTargetDependency section */
 		B18EEDD72C8CD0EE00D1A6DF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B18EEDC42C8CD0ED00D1A6DF /* ParentBank */;
+			target = B18EEDC42C8CD0ED00D1A6DF /* ParentsBank */;
 			targetProxy = B18EEDD62C8CD0EE00D1A6DF /* PBXContainerItemProxy */;
 		};
 		B18EEDE12C8CD0EE00D1A6DF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B18EEDC42C8CD0ED00D1A6DF /* ParentBank */;
+			target = B18EEDC42C8CD0ED00D1A6DF /* ParentsBank */;
 			targetProxy = B18EEDE02C8CD0EE00D1A6DF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -475,6 +475,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -487,7 +488,7 @@
 				LSSupportsOpeningDocumentsInPlace = YES;
 				MARKETING_VERSION = 1.0;
 				NEW_SETTING = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.weidays.pb.newpb;
+				PRODUCT_BUNDLE_IDENTIFIER = com.weidays.pb.pb2;
 				PRODUCT_NAME = "Parent Bank";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -508,6 +509,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -520,7 +522,7 @@
 				LSSupportsOpeningDocumentsInPlace = YES;
 				MARKETING_VERSION = 1.0;
 				NEW_SETTING = "";
-				PRODUCT_BUNDLE_IDENTIFIER = com.weidays.pb.newpb;
+				PRODUCT_BUNDLE_IDENTIFIER = com.weidays.pb.pb2;
 				PRODUCT_NAME = "Parent Bank";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -545,7 +547,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParentBank.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ParentBank";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParentsBank.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ParentsBank";
 			};
 			name = Debug;
 		};
@@ -565,7 +567,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParentBank.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ParentBank";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParentsBank.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ParentsBank";
 			};
 			name = Release;
 		};
@@ -608,7 +610,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B18EEDC02C8CD0ED00D1A6DF /* Build configuration list for PBXProject "ParentBank" */ = {
+		B18EEDC02C8CD0ED00D1A6DF /* Build configuration list for PBXProject "ParentsBank" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B18EEDE72C8CD0EE00D1A6DF /* Debug */,
@@ -617,7 +619,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B18EEDE92C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentBank" */ = {
+		B18EEDE92C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentsBank" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B18EEDEA2C8CD0EE00D1A6DF /* Debug */,
@@ -626,7 +628,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B18EEDEC2C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentBankTests" */ = {
+		B18EEDEC2C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentsBankTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B18EEDED2C8CD0EE00D1A6DF /* Debug */,
@@ -635,7 +637,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B18EEDEF2C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentBankUITests" */ = {
+		B18EEDEF2C8CD0EE00D1A6DF /* Build configuration list for PBXNativeTarget "ParentsBankUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B18EEDF02C8CD0EE00D1A6DF /* Debug */,
