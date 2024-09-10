@@ -101,17 +101,19 @@ struct ChildRowView: View {
             if let avatarImage = child.avatarImage {
                 avatarImage
                     .resizable()
-                    .scaledToFit()
-                    .frame(width: 60, height: 60)
+                    .scaledToFill()
+                    .frame(width: 100, height: 100)
                     .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.blue, lineWidth: 2))
             } else {
                 Image(systemName: "person.circle.fill")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 60, height: 60)
+                    .frame(width: 100, height: 100)
                     .foregroundColor(.gray)
             }
-            
+
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(child.name)
                     .font(.headline)

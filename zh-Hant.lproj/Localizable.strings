@@ -58,4 +58,8 @@
 "family_accounts" = "親子賬戶";
 "no_children_yet" = "還沒有孩子";
 "add_child_prompt" = "添加一個孩子開始";
-
+"failed_to_get_image" = "獲取圖片失敗";
+"failed_to_crop_image" = "裁剪圖片失敗";   
+"choose_photo" = "選擇照片";
+"take_photo" = "拍照";
+"no_image_to_crop" = "沒有圖片可以裁剪";

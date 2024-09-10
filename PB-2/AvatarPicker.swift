@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AvatarPicker: View {
     @Binding var avatarData: Data?
+    @Binding var isEditing: Bool
     @State private var showImagePicker = false
     @State private var inputImage: UIImage?
     
@@ -10,7 +11,7 @@ struct AvatarPicker: View {
             if let avatarData = avatarData, let uiImage = UIImage(data: avatarData) {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFill()
                     .frame(width: 100, height: 100)
                     .clipShape(Circle())
                     .overlay(Circle().stroke(Color.blue, lineWidth: 2))
@@ -22,49 +23,20 @@ struct AvatarPicker: View {
                     .foregroundColor(.gray)
             }
             
-            Button(NSLocalizedString("choose_photo", comment: "Choose photo button")) {
-                showImagePicker = true
+            if isEditing {
+                Button(NSLocalizedString("choose_photo", comment: "Choose photo button")) {
+                    showImagePicker = true
+                }
             }
         }
-        .sheet(isPresented: $showImagePicker, onDismiss: loadImage) {
+        .sheet(isPresented: $showImagePicker) {
             ImagePicker(image: $inputImage)
         }
-    }
-    
-    func loadImage() {
-        guard let inputImage = inputImage else { return }
-        avatarData = inputImage.jpegData(compressionQuality: 0.8)
-    }
-}
-
-struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var image: UIImage?
-    @Environment(\.presentationMode) var presentationMode
-    
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.delegate = context.coordinator
-        return picker
-    }
-    
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let parent: ImagePicker
-        
-        init(_ parent: ImagePicker) {
-            self.parent = parent
-        }
-        
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let uiImage = info[.originalImage] as? UIImage {
-                parent.image = uiImage
+        .onChange(of: inputImage) { newImage in
+            if let newImage = newImage {
+                print("新照片已选择")
+                self.avatarData = newImage.jpegData(compressionQuality: 0.8)
             }
-            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 }

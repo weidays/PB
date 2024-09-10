@@ -11,8 +11,7 @@ struct AddChildView: View {
     @State private var longTermWish = ""
     @State private var shortTermSavingsGoal = ""
     @State private var longTermSavingsGoal = ""
-    @State private var avatarImage: UIImage?
-    @State private var showingImagePicker = false
+    @State private var avatarData: Data?
 
     var body: some View {
         NavigationView {
@@ -48,44 +47,13 @@ struct AddChildView: View {
                 }
             )
         }
-        .sheet(isPresented: $showingImagePicker) {
-            ImagePicker(image: $avatarImage)
-        }
     }
     
     private var avatarView: some View {
-        Button(action: {
-            showingImagePicker = true
-        }) {
-            if let avatarImage = avatarImage {
-                Image(uiImage: avatarImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-            } else {
-                genderSpecificAvatar(for: gender)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-            }
-        }
-    }
-    
-    private func genderSpecificAvatar(for gender: Child.Gender) -> Image {
-        switch gender {
-        case .male:
-            return Image(systemName: "person.circle.fill")
-        case .female:
-            return Image(systemName: "person.crop.circle.fill")
-        case .other:
-            return Image(systemName: "person.fill.questionmark")
-        }
+        AvatarPicker(avatarData: $avatarData, isEditing: .constant(true))   
     }
     
     private func addChild() {
-        let avatarData = avatarImage?.jpegData(compressionQuality: 0.8)
         bankModel.addChild(
             name: name,
             gender: gender,

@@ -10,6 +10,8 @@ struct ChildDetailView: View {
     @State private var showingImagePicker = false
     @State private var inputImage: UIImage?
     @State private var tempAvatarImage: Image?
+    @State private var showImageCropper = false
+    @State private var tempImage: UIImage?
     
     var body: some View {
         VStack {
@@ -107,29 +109,36 @@ struct ChildDetailView: View {
         .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
             ImagePicker(image: $inputImage)
         }
+        .onChange(of: inputImage) { _ in
+            if inputImage != nil {
+                showImageCropper = true
+            }
+        }
+        // .sheet(isPresented: $showImageCropper) {
+        //     ImageCropperView(image: $inputImage, isPresented: $showImageCropper) { croppedImage in
+        //         self.tempImage = croppedImage
+        //         var updatedChild = child
+        //         updatedChild.avatarData = croppedImage.jpegData(compressionQuality: 0.8)
+        //         child = updatedChild
+        //         showImageCropper = false
+        //     }
+        // }
     }
     
     private var avatarView: some View {
-        Group {
-            if let avatarImage = tempAvatarImage ?? child.avatarImage {
-                avatarImage
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-            } else {
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .foregroundColor(.gray)
+        AvatarPicker(avatarData: Binding(
+            get: { child.avatarData },
+            set: { newValue in
+                var updatedChild = child
+                updatedChild.avatarData = newValue
+                child = updatedChild
             }
-        }
+        ),isEditing: $isEditing)
     }
     
     private func loadImage() {
         guard let inputImage = inputImage else { return }
-        tempAvatarImage = Image(uiImage: inputImage)
+        showImageCropper = true
     }
     
     private func deposit() {
@@ -175,15 +184,16 @@ struct ChildDetailView: View {
     
     private func saveChanges() {
         var updatedChild = child
-        if let inputImage = inputImage {
-            updatedChild.avatarData = inputImage.jpegData(compressionQuality: 0.8)
+        if let tempImage = tempImage {
+            updatedChild.avatarData = tempImage.jpegData(compressionQuality: 0.8)
         }
         bankModel.updateChild(updatedChild)
         isEditing = false
-        tempAvatarImage = nil
+        tempImage = nil
         inputImage = nil
         
         // 强制更新视图
         child = updatedChild
+        
     }
 }

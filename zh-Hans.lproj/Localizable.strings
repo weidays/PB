@@ -59,3 +59,8 @@
 "family_accounts" = "亲子账户";
 "no_children_yet" = "还没有孩子";
 "add_child_prompt" = "添加一个孩子开始";
+"failed_to_get_image" = "获取图片失败";
+"failed_to_crop_image" = "裁剪图片失败";   
+"choose_photo" = "选择照片";
+"take_photo" = "拍照";
+"no_image_to_crop" = "没有图片可以裁剪";

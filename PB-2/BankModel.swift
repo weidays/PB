@@ -112,9 +112,6 @@ class BankModel: ObservableObject {
         if let index = children.firstIndex(where: { $0.id == updatedChild.id }) {
             children[index] = updatedChild
             saveData()
-            
-            // 通知观察者数据已更改
-            objectWillChange.send()
         }
     }
     
@@ -129,9 +126,7 @@ class BankModel: ObservableObject {
     
     private func saveData() {
         do {
-            let encoder = JSONEncoder()
-            encoder.dateEncodingStrategy = .iso8601
-            let data = try encoder.encode(children)
+            let data = try JSONEncoder().encode(children)
             let url = getDocumentsDirectory().appendingPathComponent("bankData.json")
             try data.write(to: url, options: .atomicWrite)
             print("数据成功保存到: \(url.path)")
@@ -145,9 +140,7 @@ class BankModel: ObservableObject {
         
         if let data = try? Data(contentsOf: fileURL) {
             do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                children = try decoder.decode([Child].self, from: data)
+                children = try JSONDecoder().decode([Child].self, from: data)
             } catch {
                 print("无法加载数据: \(error.localizedDescription)")
             }

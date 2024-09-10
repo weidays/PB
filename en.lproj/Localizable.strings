@@ -61,3 +61,8 @@
 "export_backup_failure" = "Failed to export backup.";
 "import_backup_failure" = "Failed to import backup.";
 "data_backup" = "Data Backup";
+"failed_to_get_image" = "Failed to get image";
+"failed_to_crop_image" = "Failed to crop image";   
+"choose_photo" = "Choose Photo";
+"take_photo" = "Take Photo";
+"no_image_to_crop" = "No image to crop";
