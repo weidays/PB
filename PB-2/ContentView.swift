@@ -7,140 +7,155 @@
 
 import SwiftUI
 
+// 如果 AddChildView 在一个单独的文件中，可能需要添加以下导入
+// import AddChildView
+
 struct ContentView: View {
-    @StateObject private var bankModel = BankModel()
-    @State private var showingAddChild = false
-    @State private var showingAllTransactions = false // 新增状态变量
-    @State private var showingSettings = false
-    
-    let columns = [GridItem(.adaptive(minimum: 120))]
-    
+    @ObservedObject var bankModel: BankModel
+    @State private var showingAddChildSheet = false
+
     var body: some View {
         NavigationView {
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(bankModel.children) { child in
-                        NavigationLink(destination: ChildDetailView(bankModel: bankModel, child: binding(for: child))) {
-                            ChildProfileView(child: child)
-                        }
+            ZStack {
+                Color(UIColor.systemGroupedBackground)
+                    .edgesIgnoringSafeArea(.all)
+                
+                VStack(spacing: 20) {
+                    if bankModel.children.isEmpty {
+                        emptyStateView
+                    } else {
+                        childrenListView
                     }
                     
-                    Button(action: { showingAddChild = true }) {
-                        VStack(spacing: 4) {
-                            Image(systemName: "person.badge.plus")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.gray)
-                            
-                            Text(NSLocalizedString("add_account", comment: "Add account button"))
-                                .font(.system(size: 14, weight: .medium))
-                                .lineLimit(1)
-                                .frame(height: 20)
-                        }
-                        .frame(width: 90, height: 110)
-                        .padding(5)
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-                    }
+                    addChildButton
                 }
                 .padding()
             }
-            .navigationTitle(NSLocalizedString("select_account", comment: "Select account title"))
+            .navigationTitle(NSLocalizedString("family_accounts", comment: "Family accounts title"))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        Button(NSLocalizedString("all_transactions", comment: "All transactions button")) {
-                            showingAllTransactions = true
-                        }
-                        Button(NSLocalizedString("settings", comment: "Settings button")) {
-                            showingSettings = true
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
+                    NavigationLink(NSLocalizedString("settings", comment: "Settings button")) {
+                        SettingsView(bankModel: bankModel)
                     }
                 }
             }
-            .navigationBarItems(leading: EditButton().foregroundColor(.blue))
         }
-        .sheet(isPresented: $showingAddChild) {
-            AddChildView(bankModel: bankModel, isPresented: $showingAddChild)
-        }
-        .sheet(isPresented: $showingAllTransactions) {
-            NavigationView {
-                TransactionHistoryView(bankModel: bankModel)
-            }
-        }
-        .sheet(isPresented: $showingSettings) {
-            NavigationView {
-                SettingsView(bankModel: bankModel)
-            }
+        .sheet(isPresented: $showingAddChildSheet) {
+            AddChildView(bankModel: bankModel, isPresented: $showingAddChildSheet)
         }
     }
     
-    private func binding(for child: Child) -> Binding<Child> {
-        guard let childIndex = bankModel.children.firstIndex(where: { $0.id == child.id }) else {
-            fatalError("无法找到子账户")   
+    private var emptyStateView: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "person.3.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .foregroundColor(.gray)
+            
+            Text(NSLocalizedString("no_children_yet", comment: "No children yet"))
+                .font(.headline)
+                .foregroundColor(.gray)
+            
+            Text(NSLocalizedString("add_child_prompt", comment: "Add child prompt"))
+                .font(.subheadline)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
         }
-        return $bankModel.children[childIndex]
+    }
+    
+    private var childrenListView: some View {
+        ScrollView {
+            LazyVStack(spacing: 12) {
+                ForEach($bankModel.children) { $child in
+                    NavigationLink(destination: ChildDetailView(bankModel: bankModel, child: $child)) {
+                        ChildRowView(child: child)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+    
+    private var addChildButton: some View {
+        Button(action: { showingAddChildSheet = true }) {
+            HStack {
+                Image(systemName: "plus.circle.fill")
+                Text(NSLocalizedString("add_child", comment: "Add child button"))
+            }
+            .font(.headline)
+            .padding()
+            .foregroundColor(.white)
+            .background(Color.blue)
+            .cornerRadius(10)
+        }
     }
 }
 
-struct ChildProfileView: View {
+struct ChildRowView: View {
     let child: Child
     
     var body: some View {
-        VStack(spacing: 4) {
-            Image(systemName: "person.circle.fill")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 50, height: 50)
-                .foregroundColor(.blue)
-            
-            Text(child.name)
-                .font(.system(size: 14, weight: .medium))
-                .lineLimit(1)
-                .frame(height: 20)
-            
-            Text(child.balance.isNaN ? "$0.00" : child.balance.asCurrencyString())
-                .font(.system(size: 12))
-                .lineLimit(1)
-                .frame(height: 16)
-        }
-        .frame(width: 90, height: 110)
-        .padding(5)
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 3)
-    }
-}
-
-struct AddChildView: View {
-    @ObservedObject var bankModel: BankModel
-    @Binding var isPresented: Bool
-    @State private var newChildName = ""
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                TextField(NSLocalizedString("child_name", comment: "Child name field"), text: $newChildName)
-                
-                Button(NSLocalizedString("add", comment: "Add button")) {
-                    if !newChildName.isEmpty {
-                        bankModel.addChild(name: newChildName)
-                        newChildName = ""
-                        isPresented = false
-                    }
-                }
+        HStack(spacing: 16) {
+            if let avatarImage = child.avatarImage {
+                avatarImage
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+                    .clipShape(Circle())
+            } else {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.gray)
             }
-            .navigationTitle(NSLocalizedString("add_child", comment: "Add child view title"))
-            .navigationBarItems(trailing: Button(NSLocalizedString("cancel", comment: "Cancel button")) {
-                isPresented = false
-            })
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(child.name)
+                    .font(.headline)
+                
+                Text(NSLocalizedString("current_balance", comment: "Current balance") + ": " + String(format: "$%.2f", child.balance))
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                
+                Text(NSLocalizedString("short_term_wish", comment: "Short-term wish") + ": " + child.shortTermWish)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(1)
+            }
+            
+            Spacer()
+            
+            Image(systemName: "chevron.right")
+                .foregroundColor(.gray)
+        }
+        .padding()
+        .background(Color(UIColor.secondarySystemGroupedBackground))
+        .cornerRadius(12)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+        )
+    }
+    
+    private func genderSpecificAvatar(for child: Child) -> Image {
+        if let avatarImage = child.avatarImage {
+            return avatarImage
+        } else {
+            switch child.gender {
+            case .male:
+                return Image(systemName: "person.circle.fill")
+            case .female:
+                return Image(systemName: "person.crop.circle.fill")
+            case .other:
+                return Image(systemName: "person.fill.questionmark")
+            }
         }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(bankModel: BankModel())
 }

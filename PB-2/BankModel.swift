@@ -32,12 +32,11 @@ struct Child: Identifiable, Codable {
         case male, female, other
     }
     
-    var avatarImage: Image {
+    var avatarImage: Image? {
         if let data = avatarData, let uiImage = UIImage(data: data) {
             return Image(uiImage: uiImage)
-        } else {
-            return Image(systemName: "person.circle.fill")
         }
+        return nil
     }
 }
 
@@ -67,12 +66,12 @@ class BankModel: ObservableObject {
         saveData()
     }
 
-    func addChild(name: String, gender: Child.Gender, birthday: Date, shortTermWish: String, longTermWish: String, shortTermSavingsGoal: Double, longTermSavingsGoal: Double) {
+    func addChild(name: String, gender: Child.Gender, birthday: Date, shortTermWish: String, longTermWish: String, shortTermSavingsGoal: Double, longTermSavingsGoal: Double, avatarData: Data?) {
         let newChild = Child(
             id: UUID(),
             name: name,
             balance: 0,
-            avatarData: nil,
+            avatarData: avatarData,
             transactions: [],
             gender: gender,
             birthday: birthday,
@@ -113,6 +112,9 @@ class BankModel: ObservableObject {
         if let index = children.firstIndex(where: { $0.id == updatedChild.id }) {
             children[index] = updatedChild
             saveData()
+            
+            // 通知观察者数据已更改
+            objectWillChange.send()
         }
     }
     
@@ -127,7 +129,9 @@ class BankModel: ObservableObject {
     
     private func saveData() {
         do {
-            let data = try JSONEncoder().encode(children)
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            let data = try encoder.encode(children)
             let url = getDocumentsDirectory().appendingPathComponent("bankData.json")
             try data.write(to: url, options: .atomicWrite)
             print("数据成功保存到: \(url.path)")
@@ -141,7 +145,9 @@ class BankModel: ObservableObject {
         
         if let data = try? Data(contentsOf: fileURL) {
             do {
-                children = try JSONDecoder().decode([Child].self, from: data)
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                children = try decoder.decode([Child].self, from: data)
             } catch {
                 print("无法加载数据: \(error.localizedDescription)")
             }

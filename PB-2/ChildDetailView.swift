@@ -7,17 +7,24 @@ struct ChildDetailView: View {
     @State private var note: String = ""
     @State private var showingTransactionHistory = false
     @State private var isEditing = false
+    @State private var showingImagePicker = false
+    @State private var inputImage: UIImage?
+    @State private var tempAvatarImage: Image?
     
     var body: some View {
         VStack {
             Form {
                 Section(header: Text(NSLocalizedString("basic_info", comment: "Basic information section"))) {
                     HStack {
-                        child.avatarImage
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 100)
-                            .clipShape(Circle())
+                        if isEditing {
+                            Button(action: {
+                                showingImagePicker = true
+                            }) {
+                                avatarView
+                            }
+                        } else {
+                            avatarView
+                        }
                         VStack(alignment: .leading) {
                             if isEditing {
                                 TextField(NSLocalizedString("child_name", comment: "Child name field"), text: $child.name)
@@ -97,6 +104,32 @@ struct ChildDetailView: View {
         .sheet(isPresented: $showingTransactionHistory) {
             TransactionHistoryView(bankModel: bankModel, childId: child.id)
         }
+        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+            ImagePicker(image: $inputImage)
+        }
+    }
+    
+    private var avatarView: some View {
+        Group {
+            if let avatarImage = tempAvatarImage ?? child.avatarImage {
+                avatarImage
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .clipShape(Circle())
+            } else {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .foregroundColor(.gray)
+            }
+        }
+    }
+    
+    private func loadImage() {
+        guard let inputImage = inputImage else { return }
+        tempAvatarImage = Image(uiImage: inputImage)
     }
     
     private func deposit() {
@@ -138,5 +171,19 @@ struct ChildDetailView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter.string(from: date)
+    }
+    
+    private func saveChanges() {
+        var updatedChild = child
+        if let inputImage = inputImage {
+            updatedChild.avatarData = inputImage.jpegData(compressionQuality: 0.8)
+        }
+        bankModel.updateChild(updatedChild)
+        isEditing = false
+        tempAvatarImage = nil
+        inputImage = nil
+        
+        // 强制更新视图
+        child = updatedChild
     }
 }
