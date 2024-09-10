@@ -12,6 +12,17 @@ struct ChildDetailView: View {
     @State private var tempAvatarImage: Image?
     @State private var showImageCropper = false
     @State private var tempImage: UIImage?
+    @FocusState private var focusedField: Field?
+    
+    enum Field: Hashable {
+        case amount
+        case note
+        case childName
+        case shortTermWish
+        case longTermWish
+        case shortTermSavingsGoal
+        case longTermSavingsGoal
+    }
     
     var body: some View {
         VStack {
@@ -30,11 +41,16 @@ struct ChildDetailView: View {
                         VStack(alignment: .leading) {
                             if isEditing {
                                 TextField(NSLocalizedString("child_name", comment: "Child name field"), text: $child.name)
+                                    .focused($focusedField, equals: .childName)
                             } else {
                                 Text(child.name)
                                     .font(.headline)
                             }
                             Text(NSLocalizedString("current_balance", comment: "Current balance") + ": \(child.balance.asCurrencyString())")
+                            if !isEditing {
+                                Text(NSLocalizedString("gender", comment: "Gender label") + ": " + genderString(child.gender))
+                                Text(NSLocalizedString("birthday", comment: "Birthday label") + ": " + formatDate(child.birthday))
+                            }
                         }
                     }
                     
@@ -46,54 +62,62 @@ struct ChildDetailView: View {
                         }
                         DatePicker(NSLocalizedString("birthday", comment: "Birthday picker"), selection: $child.birthday, displayedComponents: .date)
                     } else {
-                        Text(NSLocalizedString("gender", comment: "Gender label") + ": " + genderString(child.gender))
-                        Text(NSLocalizedString("birthday", comment: "Birthday label") + ": " + formatDate(child.birthday))
+                       
                     }
                 }
-                
+                if !isEditing {
+                    Section(header: Text(NSLocalizedString("transaction", comment: "Transaction section"))) {
+                        TextField(NSLocalizedString("amount", comment: "Amount field"), text: $amount)
+                            .keyboardType(.decimalPad)
+                            .focused($focusedField, equals: .amount)
+                        
+                        TextField(NSLocalizedString("note", comment: "Note field"), text: $note)
+                            .focused($focusedField, equals: .note)
+                        
+                        HStack {
+                            Button(NSLocalizedString("deposit", comment: "Deposit button")) {
+                                deposit()
+                            }
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            
+                            Button(NSLocalizedString("withdraw", comment: "Withdraw button")) {
+                                withdraw()
+                            }
+                            .padding()
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        }
+                    }
+                }
+
                 Section(header: Text(NSLocalizedString("wishes_and_goals", comment: "Wishes and goals section"))) {
                     if isEditing {
                         TextField(NSLocalizedString("short_term_wish", comment: "Short-term wish field"), text: $child.shortTermWish)
+                            .focused($focusedField, equals: .shortTermWish)
                         TextField(NSLocalizedString("long_term_wish", comment: "Long-term wish field"), text: $child.longTermWish)
+                            .focused($focusedField, equals: .longTermWish)
                         TextField(NSLocalizedString("short_term_savings_goal", comment: "Short-term savings goal field"), value: $child.shortTermSavingsGoal, formatter: NumberFormatter())
+                            .focused($focusedField, equals: .shortTermSavingsGoal)
                         TextField(NSLocalizedString("long_term_savings_goal", comment: "Long-term savings goal field"), value: $child.longTermSavingsGoal, formatter: NumberFormatter())
+                            .focused($focusedField, equals: .longTermSavingsGoal)
                     } else {
                         Text(NSLocalizedString("short_term_wish", comment: "Short-term wish label") + ": " + child.shortTermWish)
                         Text(NSLocalizedString("long_term_wish", comment: "Long-term wish label") + ": " + child.longTermWish)
                         Text(NSLocalizedString("short_term_savings_goal", comment: "Short-term savings goal label") + ": \(child.shortTermSavingsGoal.asCurrencyString())")
                         Text(NSLocalizedString("long_term_savings_goal", comment: "Long-term savings goal label") + ": \(child.longTermSavingsGoal.asCurrencyString())")
-                    }
-                }
-                
-                Section(header: Text(NSLocalizedString("transaction", comment: "Transaction section"))) {
-                    TextField(NSLocalizedString("amount", comment: "Amount field"), text: $amount)
-                        .keyboardType(.decimalPad)
-                    
-                    TextField(NSLocalizedString("note", comment: "Note field"), text: $note)
-                    
-                    HStack {
-                        Button(NSLocalizedString("deposit", comment: "Deposit button")) {
-                            deposit()
-                        }
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
                         
-                        Button(NSLocalizedString("withdraw", comment: "Withdraw button")) {
-                            withdraw()
-                        }
-                        .padding()
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
                     }
                 }
-                
-                Button(NSLocalizedString("transaction_history", comment: "Transaction history button")) {
-                    showingTransactionHistory = true
+                if !isEditing {
+                    Button(NSLocalizedString("transaction_history", comment: "Transaction history button")) {
+                        showingTransactionHistory = true
+                    }
+                    .padding()
                 }
-                .padding()
             }
         }
         .navigationTitle(child.name + NSLocalizedString("'s Account", comment: "Account title"))
@@ -114,14 +138,8 @@ struct ChildDetailView: View {
                 showImageCropper = true
             }
         }
-        // .sheet(isPresented: $showImageCropper) {
-        //     ImageCropperView(image: $inputImage, isPresented: $showImageCropper) { croppedImage in
-        //         self.tempImage = croppedImage
-        //         var updatedChild = child
-        //         updatedChild.avatarData = croppedImage.jpegData(compressionQuality: 0.8)
-        //         child = updatedChild
-        //         showImageCropper = false
-        //     }
+        // .onTapGesture {
+        //     focusedField = nil
         // }
     }
     
@@ -194,6 +212,5 @@ struct ChildDetailView: View {
         
         // 强制更新视图
         child = updatedChild
-        
     }
 }
